@@ -21,6 +21,12 @@ class MainActivity : Activity(),SensorEventListener {
     private var AccSensor:Sensor? = null
     private lateinit var ball:ImageView
 
+
+    private var maxStartPostion:Int = 0
+    private var maxHeightPosition:Int = 0
+    private var startRadio:Float = 0f
+    private var heightRadio:Float = 0f
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,12 +39,10 @@ class MainActivity : Activity(),SensorEventListener {
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         AccSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        maxStartPostion = (ball.parent as ConstraintLayout).width - ball.width
+        maxHeightPosition = (ball.parent as ConstraintLayout).height - ball.height
     }
 
-    private var maxStartPostion = (ball.parent as ConstraintLayout).width-ball.width
-    private var maxHeightPosition = (ball.parent as ConstraintLayout).height - ball.height
-    private var startRadio:Float = 0f
-    private var heightRadio:Float = 0f
 
     override fun onSensorChanged(event: SensorEvent?){
         val x:Float
@@ -62,9 +66,6 @@ class MainActivity : Activity(),SensorEventListener {
         layoutParams.marginStart = Posx.toInt().coerceIn(0,(ball.parent as ConstraintLayout).width-ball.width)
         layoutParams.topMargin = Posy.toInt().coerceIn(0,(ball.parent as ConstraintLayout).height-ball.height)
         ball.layoutParams = layoutParams
-        startRadio = (layoutParams.marginStart/maxStartPostion).toFloat()
-        heightRadio = (layoutParams.topMargin/maxHeightPosition).toFloat()
-
         Log.d("Mainactivity","$startRadio")
     }
 
