@@ -35,6 +35,11 @@ class MainActivity : Activity(),SensorEventListener {
         AccSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     }
 
+    private var maxStartPostion = (ball.parent as ConstraintLayout).width-ball.width
+    private var maxHeightPosition = (ball.parent as ConstraintLayout).height - ball.height
+    private var startRadio:Float = 0f
+    private var heightRadio:Float = 0f
+
     override fun onSensorChanged(event: SensorEvent?){
         val x:Float
         val y:Float
@@ -44,6 +49,7 @@ class MainActivity : Activity(),SensorEventListener {
             x = event.values[0]
             y = event.values[1]
             ballPosition(-x,y)
+
         }
     }
 
@@ -52,12 +58,14 @@ class MainActivity : Activity(),SensorEventListener {
         Posx += deltax*ScaleFactor
         Posy += deltay*ScaleFactor
 
-
         val layoutParams = ball.layoutParams as ConstraintLayout.LayoutParams
         layoutParams.marginStart = Posx.toInt().coerceIn(0,(ball.parent as ConstraintLayout).width-ball.width)
         layoutParams.topMargin = Posy.toInt().coerceIn(0,(ball.parent as ConstraintLayout).height-ball.height)
         ball.layoutParams = layoutParams
-        Log.d("Mainactivity","${layoutParams.leftMargin}")
+        startRadio = (layoutParams.marginStart/maxStartPostion).toFloat()
+        heightRadio = (layoutParams.topMargin/maxHeightPosition).toFloat()
+
+        Log.d("Mainactivity","$startRadio")
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
